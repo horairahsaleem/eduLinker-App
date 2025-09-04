@@ -81,7 +81,7 @@ return (
 size={'xs'}
 fontFamily={'sans-serif'}
 textTransform={'uppercase'}
-children='Payment is secured by Razorpay'
+children='Payment is secured by Stripe'
 />
 
 </HStack>

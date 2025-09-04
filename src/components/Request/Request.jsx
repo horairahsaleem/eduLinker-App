@@ -3,9 +3,9 @@ import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 
 const Request = () => {
-    const [name,setName]=useState()
-    const [email,setEmail]=useState()
-    const [course,setCourse]=useState()
+    const [name,setName]=useState('')
+    const [email,setEmail]=useState('')
+    const [course,setCourse]=useState('')
   return (
     <Container h='92vh'>
         <VStack h={'full'} justifyContent={'center'} spacing={'10'}>
