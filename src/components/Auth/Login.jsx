@@ -1,16 +1,24 @@
 import { Box, Button, Container, FormLabel, Heading, Input, Stack } from '@chakra-ui/react'
 import React,{useState} from 'react'
 import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import {login} from '../../redux/Actions/userActions.js'
 
 function Login() {
     const [email,setEmail]=useState();
     const [password,setPassword]=useState();
+     const dispatch = useDispatch();
+
+  const submitHandler = e => {
+    e.preventDefault();
+    dispatch(login(email, password));
+  };
   return (
     
     <Container h={'95vh'}>
         <Stack h={'full'} justifyContent={'center'} spacing={'16'}>
             <Heading children='Welcome to CourseBundler'/>
-            <form style={{width:'100%'}}>
+            <form onSubmit={submitHandler} style={{width:'100%'}}>
                 <Box my={'4'}>
 
                 <FormLabel htmlFor='email' children='Email Address'/>
