@@ -5,14 +5,15 @@ import { useDispatch } from 'react-redux';
 import {login} from '../../redux/Actions/userActions.js'
 
 function Login() {
-    const [email,setEmail]=useState();
-    const [password,setPassword]=useState();
+    const [email,setEmail]=useState('');
+    const [password,setPassword]=useState('');
      const dispatch = useDispatch();
 
-  const submitHandler = e => {
-    e.preventDefault();
-    dispatch(login(email, password));
-  };
+ const submitHandler = (e) => {
+  e.preventDefault();
+  // trim to avoid invisible spaces causing 401
+  dispatch(login(email.trim(), password.trim()));
+};
   return (
     
     <Container h={'95vh'}>
