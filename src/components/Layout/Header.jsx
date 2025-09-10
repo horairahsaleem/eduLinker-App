@@ -1,29 +1,28 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { useDispatch } from 'react-redux';
+import {logout}   from '../../redux/Actions/userActions.js'
 
 import {ColorModeSwitcher} from '../../ColorModeSwitcher'
 import {RiDashboardFill, RiLogoutBoxLine, RiMenu5Fill} from "react-icons/ri"
 import { Button, Drawer, DrawerBody, DrawerContent, DrawerHeader, DrawerOverlay, HStack, useDisclosure, VStack } from '@chakra-ui/react'
 const LinkButton =({url ='/',tittle='Home' ,onClose})=>(
    <Link onClick={onClose} to={url}>,
-<Button variant={'ghost'}  > {tittle}</Button>
+<Button variant={'ghost'}> {tittle}</Button>
 </Link> 
 )
-// const LinkButton = ({ url = '/', title = 'Home', onClose }) => (
-//     <Link onClick={onClose} to={url}>
-//       <Button variant={'ghost'}>{title}</Button>
-//     </Link>
-//   );
-const isAuthenticated= false;
-const user ={
-role:"admin"
-};
 
-function Header() {
+// const isAuthenticated= true;
+// const user ={
+// role:"admin"
+// };
+
+function Header({ isAuthenticated = false, user }) {
     const {isOpen,onOpen,onClose} = useDisclosure()
+  const dispatch = useDispatch();
     
     const Logouthandler=()=>{
-        console.log("System is logging the user out")
+dispatch(logout())
         onClose();
     }
   return (
@@ -64,8 +63,8 @@ Course Bundler
 <Button variant={'ghost'} colorScheme='yellow'>Profile</Button>
 
 </Link>
-    <Link to="/logout">
-<Button variant={'ghost'} colorScheme='yellow' onClick={Logouthandler}>    
+    <Link  to="/logout">
+<Button onClose={onClose} variant={'ghost'} colorScheme='yellow' onClick={Logouthandler}>    
      <RiLogoutBoxLine/>
 Logout</Button>
 
@@ -85,14 +84,14 @@ Logout</Button>
 
 </>):(<>
 
-<Link to="/login">
-<Button colorScheme='yellow'>Login</Button>
+<Link  to="/login">
+<Button onClose={onClose} colorScheme='yellow'>Login</Button>
 
 </Link>
 <p>OR</p>
 
-<Link to="/register">
-<Button colorScheme='yellow'>Sign Up</Button>
+<Link  to="/register">
+<Button onClose={onClose} colorScheme='yellow'>Sign Up</Button>
 
 </Link>
 
