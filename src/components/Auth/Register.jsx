@@ -83,16 +83,17 @@ focusBorderColor='yellow.500'
                 />
                 </Box>
                
-                <Button type='submit' my={'4'} colorScheme='yellow'>
+                
+                <Box my="4">
+                  <Button type='submit' my={'4'} mx={'4'} colorScheme='yellow'>
                     Submit
                 </Button>
-                <Box my="4">
             Already Signed Up?{' '}
             <Link to="/login">
               <Button colorScheme={'yellow'} variant="link">
-                Login
+                Login here
               </Button>{' '}
-              here
+              
             </Link>
           </Box>
                 
