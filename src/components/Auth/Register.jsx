@@ -38,7 +38,7 @@ function Register() {
     }
   return (
     
-    <Container h={'110vh'}>
+    <Container h={'120vh'}>
         <Stack h='full' justifyContent={'center'} spacing={'16'}>
             <Heading children='Registration' textTransform={'uppercase'} />
             <form style={{width:'100%'}}>
