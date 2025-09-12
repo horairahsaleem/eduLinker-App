@@ -59,11 +59,11 @@ Course Bundler
 {isAuthenticated?(<>
 <VStack>
     <HStack> 
-    <Link to="/profile">
+    <Link to="/profile" onClick={onClose}>
 <Button variant={'ghost'} colorScheme='yellow'>Profile</Button>
 
 </Link>
-    <Link  to="/logout">
+    <Link  to="/logout" onClick={onClose}>
 <Button onClose={onClose} variant={'ghost'} colorScheme='yellow' onClick={Logouthandler}>    
      <RiLogoutBoxLine/>
 Logout</Button>
@@ -71,7 +71,7 @@ Logout</Button>
 </Link>
 
     </HStack>
-    {user && user.role ==='admin'&& <Link to='/admin/dashboard'>
+    {user && user.role ==='admin'&& <Link to='/admin/dashboard' onClick={onClose}>
     <Button variant={'ghost'} colorScheme={'purple'}>
         <RiDashboardFill style={{margin:"4px"}}/>
         Dashboard
@@ -84,13 +84,13 @@ Logout</Button>
 
 </>):(<>
 
-<Link  to="/login">
+<Link  to="/login" onClick={onClose}>
 <Button onClose={onClose} colorScheme='yellow'>Login</Button>
 
 </Link>
 <p>OR</p>
 
-<Link  to="/register">
+<Link  to="/register" onClick={onClose}>
 <Button onClose={onClose} colorScheme='yellow'>Sign Up</Button>
 
 </Link>
