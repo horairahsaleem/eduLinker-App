@@ -4,11 +4,15 @@ import { useEffect } from 'react';
 import toast from 'react-hot-toast';
 import { useDispatch, useSelector } from 'react-redux';
 import { changePassword } from '../../redux/Actions/profileActions.js';
+import { useNavigate } from 'react-router-dom';
+
 
 
 const ChangePassword = () => {
     const [oldPassword,setOldPassword]=useState()
     const [newPassword,setNewPassword]=useState()
+    const  navigate =useNavigate()
+
     
   const dispatch = useDispatch();
   const submitHandler = e => {
@@ -26,6 +30,8 @@ const ChangePassword = () => {
     if (message) {
       toast.success(message);
       dispatch({ type: 'clearMessage' });
+                  navigate('/profile');
+
     }
   }, [dispatch, error, message]);
   return (
