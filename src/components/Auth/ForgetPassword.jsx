@@ -37,7 +37,10 @@ const ForgetPassword = () => {
                 type='email'
                 focusBorderColor='yellow.500'
                 />
-                <Button type='submit'   colorScheme='yellow' w={'full'} >
+                <Button type='submit'            
+                  isLoading={loading}
+                 colorScheme='yellow'
+                 w={'full'} >
                     Send Reset Link
                 </Button>
 
