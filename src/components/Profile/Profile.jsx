@@ -1,38 +1,71 @@
 import { Avatar, Button, Container, Heading, HStack, Image, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Stack, Text, useDisclosure, VStack } from '@chakra-ui/react'
-import React, { useState } from 'react'
+import React, { useState , useEffect} from 'react'
 import { Link } from 'react-router-dom'
 import{RiDeleteBin7Fill } from "react-icons/ri"
 import { FileUploadCss } from '../Auth/Register'
+import { useDispatch, useSelector } from 'react-redux';
+import toast from 'react-hot-toast';
+import {
+  removeFromPlaylist,
+  updateProfilePicture,
+} from '../../redux/Actions/profileActions.js';
+import { cancelSubscription, loadUser } from '../../redux/Actions/userActions.js';
 
 
-const Profile = () => {
-    const user = {
-        name:'Horairah Saleem',
-        email: 'horairahsaleem786@gmail.com',
-        createdAt: String(new Date().toISOString()),
-        role:'user',
-        subscription:{
-            status:undefined
-        }
-        ,
-        playlist:[
-            {
+
+
+const Profile = ({  user}) => {
+      const dispatch = useDispatch();
+     const { loading, message, error } = useSelector(state => state.profile);
+      const {
+    loading: subscriptionLoading,
+    message: subscriptionMessage,
+    error: subscriptionError,
+  } = useSelector(state => state.subscription);
+
+      
+   
             
-                course:'dummyid66778',
-                poster:'https://cdn.pixabay.com/photo/2016/10/26/19/00/domain-names-1772242_1280.jpg'
-            
-        }]
-    };
-    const changeImageSubmitHandler =(e,Image)=>(
-        e.preventDefault(),
-        console.log(Image)
-    )
     
+     const removeFromPlaylistHandler = async id => {
+    await dispatch(removeFromPlaylist(id));
+    dispatch(loadUser());
+  };
+  const changeImageSubmitHandler = async (e, Image) => {
+  e.preventDefault();
+  const myForm = new FormData();
+  myForm.append("file", Image);
 
-    const removeFromPlaylistHandler=(id)=>{
-        console.log("Course is removed from the playlist ")
-    }
+  await dispatch(updateProfilePicture(myForm));
+  onClose(); // close modal after success
+};
+
+
+  const cancelSubscriptionHandler = () => {
+    dispatch(cancelSubscription());
+  };
     const {isOpen,onClose,onOpen} = useDisclosure()
+      useEffect(() => {
+    if (error) {
+      toast.error(error);
+      dispatch({ type: 'clearError' });
+    }
+    if (message) {
+      toast.success(message);
+      dispatch({ type: 'clearMessage' });
+    }
+    if (subscriptionMessage) {
+      toast.success(subscriptionMessage);
+      dispatch({ type: 'clearMessage' });
+      dispatch(loadUser());
+    }
+
+    if (subscriptionError) {
+      toast.error(subscriptionError);
+      dispatch({ type: 'clearError' });
+    }
+  }, [dispatch, error, message, subscriptionError, subscriptionMessage]);
+
       
   return (
    <Container minH={'95vh'} maxW={'container.lg'} py={'8'}>
@@ -47,7 +80,7 @@ const Profile = () => {
 
     >
 <VStack>
-    <Avatar boxSize={'48'}/>
+    <Avatar boxSize={'48'} src={user.avatar.url}/>
     <Button onClick={onOpen} colorScheme='yellow' variant={'ghost'}> 
         Change Photo
     </Button>
@@ -72,7 +105,7 @@ const Profile = () => {
         </Text>
         {user.subscription.status=== 'active' ? (
 
-            <Button colorScheme='yellow' variant={'outline'}>
+            <Button isLoading={subscriptionLoading} onClick={cancelSubscriptionHandler} colorScheme='yellow' variant={'outline'}>
            Cancel Subscription
             </Button>
         ) : (
@@ -123,7 +156,7 @@ const Profile = () => {
             
             </Link>
 
-            <Button onClick={()=>removeFromPlaylistHandler(element.course)}>
+            <Button   isLoading={loading} onClick={()=>removeFromPlaylistHandler(element.course)}>
                 <RiDeleteBin7Fill/>
 
             </Button>
@@ -135,58 +168,145 @@ const Profile = () => {
 
     </Stack>
    ) }
-   <ChnagePhotoBox changeImageSubmitHandler={changeImageSubmitHandler} isOpen={isOpen} onClose={onClose}/>
+   
+   <ChangePhotoBox  isLoading={loading} changeImageSubmitHandler={changeImageSubmitHandler} isOpen={isOpen} onClose={onClose}/>
    </Container>
   )
 }
 
 export default Profile
 
-function ChnagePhotoBox({isOpen,onClose,changeImageSubmitHandler}){
-    const [ImagePrev,setImagePrev]=useState();
-    const [Image,setImage]=useState();
-    const changeImage =(e)=>{
-        const file = e.target.files[0];
-        const reader= new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload =()=>{
-          setImagePrev(reader.result);
-          setImage(file);
+// function ChnagePhotoBox({isOpen,
+//   onClose,
+//   changeImageSubmitHandler,
+//   loading,}){
+//     const [ImagePrev,setImagePrev]=useState();
+//     const [Image,setImage]=useState();
+   
+
+
+//     const changeImage =(e)=>{
+//         const file = e.target.files[0];
+//         const reader= new FileReader();
+//         reader.readAsDataURL(file);
+//         reader.onloadend =()=>{
+//           setImagePrev(reader.result);
+//           setImage(file);
       
-        }
+//         }
       
-      }
-      const closeHandler =()=>(
-        onClose(),
-        setImagePrev(''),
-        setImage('')
-      )
-    return(
-<Modal isOpen={isOpen} onClose={closeHandler} >
-    <ModalOverlay backdropFilter={'blur(10px)'}/>
-    <ModalContent>
+//       }
+//       const closeHandler =()=>(
+//         onClose(),
+//         setImagePrev(''),
+//         setImage('')
+//       )
+//     return(
+// <Modal isOpen={isOpen} onClose={closeHandler} >
+//     <ModalOverlay backdropFilter={'blur(10px)'}/>
+//     <ModalContent>
+//         <ModalHeader>Change Photo</ModalHeader>
+//         <ModalCloseButton/>
+//         <ModalBody>
+//             <Container>
+//                 <form onSubmit={e=>changeImageSubmitHandler(e,Image)}>
+//                     <VStack spacing={'8'}>
+//                        {ImagePrev&& <Avatar boxSize={'48'} src={ImagePrev}/>}
+//                         <Input type='file' css={{'&::file-selector-button':FileUploadCss}} onChange={changeImage}/>
+//                    <Button isLoading={loading} colorScheme='yellow' w={'full'} type='submit'>Change</Button>
+                
+//                     </VStack>
+//                 </form>
+//             </Container>
+
+//         </ModalBody>
+//         <ModalFooter>
+//             <Button mr={'3'} onClick={closeHandler}>Cancel</Button>
+//         </ModalFooter>
+
+
+//     </ModalContent>
+// </Modal>
+
+//     )
+// }
+
+// // 
+function ChangePhotoBox({
+  isOpen,
+  onClose,
+  changeImageSubmitHandler,
+  loading,
+}) {
+  const [image, setImage] = useState("");
+  const [imagePrev, setImagePrev] = useState("");
+  const [submitting, setSubmitting] = useState(false); // local state
+
+  const changeImage = (e) => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+
+    reader.readAsDataURL(file);
+
+    reader.onloadend = () => {
+      setImagePrev(reader.result);
+      setImage(file);
+    };
+  };
+
+  const closeHandler = () => {
+    onClose();
+    setImagePrev("");
+    setImage("");
+    setSubmitting(false); // reset local loader if modal closes
+  };
+
+  // wrapper around your submit handler
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setSubmitting(true); // start local spinner immediately
+    await changeImageSubmitHandler(e, image); // call original handler
+    setSubmitting(false); // stop after request finishes
+  };
+
+  return (
+    <Modal isOpen={isOpen} onClose={closeHandler}>
+      <ModalOverlay backdropFilter={"blur(10px)"} />
+      <ModalContent>
         <ModalHeader>Change Photo</ModalHeader>
-        <ModalCloseButton/>
+        <ModalCloseButton />
         <ModalBody>
-            <Container>
-                <form onSubmit={(e)=>changeImageSubmitHandler(e,Image)}>
-                    <VStack spacing={'8'}>
-                       {ImagePrev&& <Avatar boxSize={'48'} src={ImagePrev}/>}
-                        <Input type='file' css={{'&::file-selector-button':FileUploadCss}} onChange={changeImage}/>
-                    {ImagePrev && <Button colorScheme='yellow' w={'full'} type='submit'>Change</Button>
-                }
-                    </VStack>
-                </form>
-            </Container>
+          <Container>
+            <form onSubmit={handleSubmit}>
+              <VStack spacing={"8"}>
+                {imagePrev && <Avatar src={imagePrev} boxSize={"48"} />}
 
+                <Input
+                  type={"file"}
+                  css={{ " &::file-selector-button ": FileUploadCss }}
+                  onChange={changeImage}
+                />
+
+                <Button
+                  isLoading={submitting || loading} // ✅ combine both loaders
+                  w="full"
+                  colorScheme={"yellow"}
+                  type="submit"
+                >
+                  Change
+                </Button>
+              </VStack>
+            </form>
+          </Container>
         </ModalBody>
+
         <ModalFooter>
-            <Button mr={'3'} onClick={closeHandler}>Cancel</Button>
+          <Button mr="3" onClick={closeHandler}>
+            Cancel
+          </Button>
         </ModalFooter>
-
-
-    </ModalContent>
-</Modal>
-
-    )
+      </ModalContent>
+    </Modal>
+  );
 }
+

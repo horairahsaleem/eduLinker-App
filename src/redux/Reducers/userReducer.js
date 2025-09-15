@@ -94,13 +94,16 @@ export const profileReducer = createReducer(profileInitialState, (builder) => {
       state.loading = false;
       state.error = action.payload;
     })
-    .addCase("updateProfilePictureRequest", (state) => {
+   .addCase("updateProfilePictureRequest", (state) => {
       state.loading = true;
     })
-    .addCase("updateProfilePictureSuccess", (state, action) => {
-      state.loading = false;
-      state.message = action.payload;
-    })
+   .addCase("updateProfilePictureSuccess", (state, action) => {
+  state.loading = false;
+  state.message = action.payload.message;
+  state.user = action.payload.user;  // ✅ replace whole user object
+})
+
+
     .addCase("updateProfilePictureFail", (state, action) => {
       state.loading = false;
       state.error = action.payload;

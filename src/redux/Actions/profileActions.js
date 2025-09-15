@@ -1,5 +1,6 @@
 import { server } from '../store';
 import axios from 'axios';
+import { loadUser } from "./userActions.js";
 
 // ====================== PROFILE / PLAYLIST ACTIONS ======================
 
@@ -32,12 +33,26 @@ export const updateProfilePicture = (formData) => async (dispatch) => {
       { headers: { "Content-type": "multipart/form-data" }, withCredentials: true }
     );
 
-    dispatch({ type: "updateProfilePictureSuccess", payload: data.message });
+    // success message
+   dispatch({
+  type: "updateProfilePictureSuccess",
+  payload: {
+    message: data.message,
+    user: data.user,   // <-- pass updated user to reducer
+  },
+});
+    // Update the main auth/user state so UI everywhere (Profile) re-renders with new avatar
+    await dispatch(loadUser());
+
+    // return to caller so component can close modal or show extra UI
+    return { success: true, data };
+
   } catch (error) {
     dispatch({
       type: "updateProfilePictureFail",
       payload: error.response?.data?.message || error.message,
     });
+
   }
 };
 

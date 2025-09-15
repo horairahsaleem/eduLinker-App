@@ -1,6 +1,7 @@
 import { server } from '../store';
 import axios from 'axios';
 
+
 // ====================== AUTH ACTIONS ======================
 export const login = (email, password) => async (dispatch) => {
   try {
@@ -56,6 +57,7 @@ export const loadUser = () => async (dispatch) => {
 
     dispatch({ type: "loadUserSuccess", payload: data.user });
   } catch (error) {
+      console.log("LoadUser failed:", error.response?.data || error.message);
     dispatch({
       type: "loadUserFail",
       payload: error.response?.data?.message || error.message,

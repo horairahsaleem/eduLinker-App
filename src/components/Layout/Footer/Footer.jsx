@@ -12,9 +12,11 @@ function Footer() {
                 <Heading color={'yellow.400'} fontFamily={'body'} size='sm'> Horairah Saleem</Heading>
             </VStack>
             <HStack color={'white'} fontSize={'50'} spacing={['2','10']} justifyContent={'center'}>
-                <a href='https://www.youtube.com/' target='blank'> <TiSocialYoutubeCircular/> </a>
-                <a href='https://instagram.com/shorairah' target='blank'> <TiSocialInstagramCircular/> </a>
-                <a href='https://github.com/horairahsaleem' target='blank'> <DiGithub/> </a>
+  
+  <a href='https://github.com/horairahsaleem' target='blank'> <DiGithub/> </a>  
+   <a href='https://instagram.com/shorairah' target='blank'> <TiSocialInstagramCircular/> </a>
+
+  <a href='https://www.youtube.com/' target='blank'> <TiSocialYoutubeCircular/> </a>
 
             </HStack>
         </Stack>
