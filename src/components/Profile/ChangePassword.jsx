@@ -22,7 +22,7 @@ const ChangePassword = () => {
 
   const { loading, message, error } = useSelector(state => state.profile);
 
-  useEffect(() => {
+  useEffect(() => { 
     if (error) {
       toast.error(error);
       dispatch({ type: 'clearError' });
