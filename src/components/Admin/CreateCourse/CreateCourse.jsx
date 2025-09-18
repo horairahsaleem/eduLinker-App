@@ -3,16 +3,26 @@ import React, { useState } from 'react'
 import cursor from '../../../assets/images/cursor.png'
 import Sidebar from '../Sidebar'
 import { FileUploadCss } from '../../Auth/Register'
-const categories=[
-  'Web Development','Data Science','DataBase','Data Structures and Algorithms','Artificial Intelligence','Game development'
-]
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { createCourse } from '../../../redux/Actions/adminActions.js';
+import toast from 'react-hot-toast';
+
 const CreateCourse = () => {
+
   const [title,setTitle] = useState('')
   const [description,setDescription] = useState('')
-  const [createdBy,setCreatedBy] = useState('')
+  const [createdby,setCreatedBy] = useState('')
   const [category,setCategory] = useState('')
   const[image,setImage]=useState('')
   const [imagePrev,setImagePrev] = useState('')
+
+    const dispatch = useDispatch();
+  const { loading, error, message } = useSelector(state => state.admin);
+
+  const categories=[
+  'Web Development','Data Science','DataBase','Data Structures and Algorithms','Artificial Intelligence','Game development'
+]
   const ImageHandler =(e)=>{
     const file = e.target.files[0];
     const reader= new FileReader();
@@ -24,6 +34,30 @@ const CreateCourse = () => {
     }
   
   }
+
+const submitHandler = e => {
+    e.preventDefault();
+    const myForm = new FormData();
+    myForm.append('title', title);
+    myForm.append('description', description);
+    myForm.append('category', category);
+    myForm.append('createdby', createdby);
+    myForm.append('file', image);
+    dispatch(createCourse(myForm));
+  };
+
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+      dispatch({ type: 'clearError' });
+    }
+
+    if (message) {
+      toast.success(message);
+      dispatch({ type: 'clearMessage' });
+    }
+  }, [dispatch, error, message]);
+
   return (
     <Grid
     
@@ -34,7 +68,7 @@ const CreateCourse = () => {
     }}
     >
         <Container py={'16'}>
-          <form>
+          <form onSubmit={submitHandler}>
             <Heading textTransform={'uppercase'} textAlign={['center','left']} my={'16'} children='Create Course'/>
             <VStack m={'auto'} spacing={'8'}>
               <Input
@@ -50,7 +84,7 @@ const CreateCourse = () => {
               type='text'
               focusBorderColor='purple.300'/>
               <Input
-              value={createdBy}
+              value={createdby}
               onChange={e => setCreatedBy(e.target.value)}
               placeholder='CreatedBy'
               type='text'
@@ -77,7 +111,7 @@ const CreateCourse = () => {
                     <Image src={imagePrev} boxSize={'64'} objectFit={'contain'}/>
                   )
                 }
-       <Button type='submit' w={'full'} colorScheme='purple'>
+       <Button isLoading={loading} type='submit' w={'full'} colorScheme='purple'>
         Create
        </Button>
             </VStack>

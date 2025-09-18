@@ -8,8 +8,7 @@ export const createCourse = (formData) => async (dispatch) => {
     dispatch({ type: "createCourseRequest" });
 
     const { data } = await axios.post(`${server}/createcourse`, formData, {
-      headers: { "Content-type": "multipart/form-data" },
-      withCredentials: true,
+      withCredentials: true, // keep this if you're using cookies/session
     });
 
     dispatch({ type: "createCourseSuccess", payload: data.message });

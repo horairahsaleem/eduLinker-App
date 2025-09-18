@@ -53,7 +53,7 @@ function Courses() {
   };
 
   const categories=[
-    'Web Development','Data Science','DataBase','Data Structures and Algorithms','Artificial Intelligence','Game development'
+    'Web Development','Programming','Data Science','DataBase','Data Structures and Algorithms','Artificial Intelligence','Game development'
   ]
  const { loading, courses, error, message } = useSelector(
     state => state.course
@@ -103,7 +103,7 @@ function Courses() {
               views={item.views}
               imageSrc={item.poster.url}
               id={item._id}
-              creator={item.createdBy}
+              creator={item.createdby}
               lectureCount={item.numOfVideos}
               addToPlaylistHandler={addToPlaylistHandler}
               loading={loading}
