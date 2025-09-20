@@ -4,7 +4,7 @@ import { RiDeleteBin7Fill,RiCloseFill } from 'react-icons/ri'
 import { FiUploadCloud } from 'react-icons/fi'
 import { FileUploadCss } from '../../Auth/Register'
 
-const CourseModal = ({isOpen,onClose,id,deleteButtonHandler,courseTitle,lectures=[1,2,3,4,5,6,7,8,9,10],addLectureHandler}) => {
+const CourseModal = ({isOpen,onClose,id,deleteButtonHandler,courseTitle,lectures=[],addLectureHandler,loading}) => {
     const [title,setTitle]=useState()
     const [description,setDescription]=useState()
     const [video,setVideo]=useState()
@@ -43,14 +43,16 @@ const CourseModal = ({isOpen,onClose,id,deleteButtonHandler,courseTitle,lectures
                     </Box>
                     <Heading children='Lectures' size='lg'/>
                     {lectures.map((item,i)=>(
-                        <VideoCard
-                        title="React Intro"
-                        description="In this lecture you will know the basics of react"
-                        num={1}
-                         lectureId={"dhjsdshjdjdd"}
-                        courseId={id}
-                        deleteButtonHandler={deleteButtonHandler}
-                        />
+                         <VideoCard
+                  key={i}
+                  title={item.title}
+                  description={item.description}
+                  num={i + 1}
+                  lectureId={item._id}
+                  courseId={id}
+                  deleteButtonHandler={deleteButtonHandler}
+                  loading={loading}
+                 />
     
                     ))}
                 </Box>
@@ -84,7 +86,7 @@ const CourseModal = ({isOpen,onClose,id,deleteButtonHandler,courseTitle,lectures
                         </video>
                     )
                 }
-                <Button w={'full'} colorScheme='purple' type='submit'> <FiUploadCloud size={'xs'}/> </Button>
+                <Button  isLoading={loading}  w={'full'} colorScheme='purple' type='submit'> <FiUploadCloud size={'xs'}/> </Button>
 
 
                         </VStack>

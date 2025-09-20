@@ -97,7 +97,7 @@ e.preventDefault();
 </Thead>
 <Tbody>
   {courses.map(item =>(
-    <Row courseDetailsHandler={courseDetailsHandler} deleteButtonHandler={deleteButtonHandler}  item={item} key={item._id} />
+    <Row  loading={loading} courseDetailsHandler={courseDetailsHandler} deleteButtonHandler={deleteButtonHandler}  item={item} key={item._id} />
   ))}
 
 </Tbody>
@@ -107,8 +107,8 @@ e.preventDefault();
 
 
 <CourseModal isOpen={isOpen} onClose={onClose} 
-id={'sdsdsadsad'}
- courseTitle='React Course'
+id={courseId}
+ courseTitle={courseTitle}
   deleteButtonHandler={deleteLectureButtonHandler} 
   addLectureHandler={addLectureHandler} />
           
@@ -126,17 +126,17 @@ id={'sdsdsadsad'}
 <Td> <Image src={item.poster.url}/></Td>
 <Td>{item.title}</Td>
 <Td textTransform={'uppercase'}>{item.category}</Td>
-<Td>{item.createdBy}</Td>
+<Td>{item.createdby}</Td>
 <Td isNumeric>{item.views}</Td>
-<Td isNumeric>{item.numOfVedios}</Td>
+<Td isNumeric>{item.numOfVideos}</Td>
 
 <Td isNumeric>
 <HStack>
-<Button variant={'outline'} color={'purple.500'} onClick={() => courseDetailsHandler (item._id , item.title)}>
+<Button isLoading={loading} variant={'outline'} color={'purple.500'} onClick={() => courseDetailsHandler (item._id , item.title)}>
   View Lectures
 
 </Button>
-<Button onClick={()=>deleteButtonHandler(item._id)}>
+<Button isLoading={loading} onClick={()=>deleteButtonHandler(item._id)}>
   <RiDeleteBin7Fill/>
 </Button>
 
