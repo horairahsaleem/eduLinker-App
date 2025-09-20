@@ -30,9 +30,9 @@ const [courseId, setCourseId] = useState('');
 
    const courseDetailsHandler = (courseId, title) => {
     dispatch(getCourseLectures(courseId));
-    onOpen();
     setCourseId(courseId);
     setCourseTitle(title);
+    onOpen();
   };
  const deleteButtonHandler = courseId => {
     console.log(courseId);
@@ -106,11 +106,15 @@ e.preventDefault();
         </TableContainer>
 
 
-<CourseModal isOpen={isOpen} onClose={onClose} 
+<CourseModal 
+          loading={loading}
+isOpen={isOpen} onClose={onClose} 
 id={courseId}
  courseTitle={courseTitle}
   deleteButtonHandler={deleteLectureButtonHandler} 
-  addLectureHandler={addLectureHandler} />
+  addLectureHandler={addLectureHandler} 
+  lectures={lectures}
+  />
           
         </Box>
     <Sidebar/>

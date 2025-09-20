@@ -5,10 +5,10 @@ import { FiUploadCloud } from 'react-icons/fi'
 import { FileUploadCss } from '../../Auth/Register'
 
 const CourseModal = ({isOpen,onClose,id,deleteButtonHandler,courseTitle,lectures=[],addLectureHandler,loading}) => {
-    const [title,setTitle]=useState()
-    const [description,setDescription]=useState()
-    const [video,setVideo]=useState()
-    const [videoPrev,setVideoPrev]=useState()
+    const [title, setTitle] = useState('');
+const [description, setDescription] = useState('');
+const [video, setVideo] = useState('');
+const [videoPrev, setVideoPrev] = useState('');
     const videoHandler =(e)=>{
         const file = e.target.files[0];
         const reader= new FileReader();
@@ -27,6 +27,8 @@ const CourseModal = ({isOpen,onClose,id,deleteButtonHandler,courseTitle,lectures
         setVideoPrev("")
         onClose()
       }
+                        //   console.log("Lectures inside modal:", lectures);
+
   return (
    <Modal isOpen={isOpen} size={'full'} onClose={handleClose} scrollBehavior='outside'>
     <ModalOverlay/>
@@ -38,10 +40,12 @@ const CourseModal = ({isOpen,onClose,id,deleteButtonHandler,courseTitle,lectures
                 <Box px={['0','16']}>
                     <Box my={'5'}>
                         <Heading children={courseTitle}/>
-                        <Heading children={`#${id}` } size='sm' opacity={'0,4'}/>
+<Heading children={`#${id}`} size="sm" opacity={0.4} />
 
                     </Box>
                     <Heading children='Lectures' size='lg'/>
+                        {/* {                    console.log("Lectures inside modal:", lectures)} */}
+
                     {lectures.map((item,i)=>(
                          <VideoCard
                   key={i}
@@ -71,7 +75,7 @@ const CourseModal = ({isOpen,onClose,id,deleteButtonHandler,courseTitle,lectures
                             focusBorderColor='purple.300'
                             onChange={(e)=>setDescription(e.target.value)}/>
                              
-                             <Input accept='video/mp4/*' required  
+                             <Input accept='video/mp4/' required  
                 type='file' focusBorderColor='purple.300'
                 css={{
                   '&::file-selector-button':{
@@ -113,16 +117,22 @@ const CourseModal = ({isOpen,onClose,id,deleteButtonHandler,courseTitle,lectures
 export default CourseModal
 
 
-function VideoCard({title,description,num,lectureId,courseId,deleteButtonHandler}){
+function VideoCard({loading,title,description,num,lectureId,courseId,deleteButtonHandler}){
     return <Stack direction={['column','row']} my={'8'} borderRadius={'lg'} p={['4','8']} justifyContent={['flex-start','space-between']} boxShadow={'0 0 10px rgba(107,70,193,0.5)'}>
         <Box>
         <Heading size={'sm'} children={`#${num} ${title}`}/>
         <Text children={description}/>
         </Box>
-        <Button color={'purple.600'} onClick={()=>deleteButtonHandler(courseId,lectureId)}>
-            <RiDeleteBin7Fill/> 
-
-        </Button>
+     <Button
+  isLoading={loading}
+  color={'purple.600'}
+  onClick={()=>{
+    console.log("Delete pressed with:", courseId, lectureId)
+    deleteButtonHandler(courseId,lectureId)
+  }}
+>
+  <RiDeleteBin7Fill/> 
+</Button>
 
 
     </Stack>

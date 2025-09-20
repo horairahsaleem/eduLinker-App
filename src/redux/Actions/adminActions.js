@@ -59,10 +59,13 @@ export const deleteLecture = (courseId, lectureId) => async (dispatch) => {
   try {
     dispatch({ type: "deleteLectureRequest" });
 
-    const { data } = await axios.delete(
-      `${server}/lecture?courseId=${courseId}&lectureId=${lectureId}`,
-      { withCredentials: true }
-    );
+   // adminActions.js
+const { data } = await axios.delete(
+  `${server}/lecture?courseid=${courseId}&lectureid=${lectureId}`,
+  { withCredentials: true }
+);
+
+
 
     dispatch({ type: "deleteLectureSuccess", payload: data.message });
   } catch (error) {
