@@ -1,48 +1,38 @@
-import { Box, Grid, Heading, Text, VStack } from '@chakra-ui/react'
-import React, { useState } from 'react'
-import Introvideo from '../../assets/vedios/intro.mp4'
+import { Box,Grid, Heading, Text, VStack } from '@chakra-ui/react'
+// import Introvideo from '../../assets/vedios/intro.mp4'
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Navigate, useParams } from 'react-router-dom';
+import { getCourseLectures } from '../../redux/Actions/courseActions';
+import Loader from '../Layout/Loader/Loader';
 
-const CoursePage = () => {
-    const [lectureNumber,setLectureNumber] = useState(0)
-    const lectures= [
-        {
-           _id: 'asdfghjkl1',
-          title:'Sample1',
-          description:'This is the sample data actual data come from the  the backend and they properly will be displayed here ',
-       video:{
-    url:'asdsdsadsadsa'
-   }
-        },
-        {
-           _id: 'asdfghjk2',
-          title:'Sample2',
-          description:'This is the sample data actual data come from the  the backend and they properly will be displayed here ',
-       video:{
-    url:'asdsdsadsadsa'
-   }
-        }
-        ,
-        {
-           _id: 'asdfghjk3',
-          title:'Sample3',
-          description:'This is the sample data actual data come from the  the backend and they properly will be displayed here ',
-       video:{
-    url:'asdsdsadsadsa'
-   }
-        }
-        ,
-        {
-           _id: 'asdfghjk4',
-          title:'Sample4',
-          description:'This is the sample data actual data come from the  the backend and they properly will be displayed here ',
-       video:{
-    url:'asdsdsadsadsa'
-   }
-        }
-    ]
+
+const CoursePage = ({user}) => {
+ const [lectureNumber,setLectureNumber] = useState(0);
+   const { lectures, loading } = useSelector(state => state.course);
+
+  const dispatch = useDispatch();
+  const params = useParams();
+
+  useEffect(() => {
+    dispatch(getCourseLectures(params.id));
+  }, [dispatch, params.id]);
+
+  if (
+    user.role !== 'admin' &&
+    (user.subscription === undefined || user.subscription.status !== 'active')
+  ) {
+    return <Navigate to={'/subscribe'} />;
+  }
+   
     
-  return (
+  return  loading ? (
+    <Loader />
+  ) :(
    <Grid minH={'90vh'} templateColumns={['1fr','3fr 1fr']}>
+            {lectures && lectures.length > 0 ? ( 
+               <>
+
     <Box>
     <video
     width={'100%'}
@@ -50,7 +40,7 @@ const CoursePage = () => {
                  controlsList='nodownload  noremoteplayback'
                  disablePictureInPicture
                  disableRemotePlayback
-                src={Introvideo}
+                src={lectures[lectureNumber].video.url}
                 >
                    </video>  
                    <Heading m={'4'}>
@@ -85,6 +75,16 @@ const CoursePage = () => {
             ))
         }
     </VStack>
+    </>
+      ) : (
+        <VStack justify="center" align="center" minH="70vh" spacing={4}>
+    <Text fontSize="5xl">📚</Text>
+    <Heading size="md" color="gray.600">
+      No Lectures Found
+    </Heading>
+    <Text color="gray.400">Please check back later</Text>
+  </VStack>
+      )} 
 
    </Grid>
   )
