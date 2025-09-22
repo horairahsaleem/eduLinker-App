@@ -1,9 +1,13 @@
 import { Box, Grid, Heading, HStack, Progress, Stack, Text } from '@chakra-ui/react'
-import React from 'react'
+import React, { useEffect } from 'react';
 import cursor from '../../../assets/images/cursor.png'
 import Sidebar from '../Sidebar'
 import { RiArrowDownLine, RiArrowUpLine } from 'react-icons/ri'
 import { DoughnutChart, LineChart } from './Chart'
+import { useDispatch, useSelector } from 'react-redux';
+import { getDashboardStats } from '../../../redux/Actions/adminActions.js';
+import Loader from '../../Layout/Loader/Loader';
+
 
 const DataBox =({title,qty,qtyPercentage,profit})=>(
     <Box
@@ -41,15 +45,37 @@ const Bar =({title,value,profit})=>(
 )
 
 const Dashboard = () => {
+      const dispatch = useDispatch();
+
+  const {
+    loading,
+    stats=[],
+    viewsCount,
+    subscriptionCount,
+    usersCount,
+    subscriptionPercentage,
+    viewsPercentage,
+    usersPercentage,
+    subscriptionProfit,
+    viewsProfit,
+    usersProfit,
+  } = useSelector(state => state.admin);
+
+  useEffect(() => {
+    dispatch(getDashboardStats());
+  }, [dispatch]);
   return (
     <Grid
     
     minH={'100VH'}
     templateColumns={['1fr','5fr 1fr']}
     css={{
-        cursor:`url${cursor},default`,
+        cursor:`url(${cursor}),default`,
     }}
     >
+         {loading || !stats ? (
+        <Loader color="purple.500" />
+      ) : (
         <Box boxSizing='border-box' py={'16'} px={['4','0']}>
             <Text
             textAlign={'center'}
@@ -67,9 +93,9 @@ const Dashboard = () => {
             justifyContent={'space-evenly'}
             minH={'24'}
             >
-                <DataBox title='Views' qty={67} qtyPercentage={30} profit={true}/>
-                <DataBox title='Users' qty={78} qtyPercentage={80} profit={true}/>
-                <DataBox title='Subscription' qty={12} qtyPercentage={20} profit={false}/>
+                <DataBox title='views' qty={viewsCount} qtyPercentage={viewsPercentage} profit={viewsProfit}/>
+                <DataBox title='Users' qty={usersCount} qtyPercentage={usersPercentage} profit={usersProfit}/>
+                <DataBox title='Subscription' qty={subscriptionCount} qtyPercentage={subscriptionPercentage} profit={false}/>
 
             </Stack>
             <Box
@@ -86,7 +112,7 @@ const Dashboard = () => {
                 children='Views Graph'
                 pt={['8','0']}
                 ml={['0','16']}/>
-                <LineChart/>
+            <LineChart views={stats.map(item => item.views)} />
 
 
             </Box>
@@ -100,20 +126,26 @@ const Dashboard = () => {
                     >
                         Progress Bar
                     </Heading>
-                    <Bar profit={true} title={'Views'} value={67}/>
-                    <Bar profit={true} title={'Users'} value={78}/>
-                    <Bar profit={false} title={'Subscription'} value={20}/>
-
+                    <Box>
+                    <Bar profit={viewsProfit} title={'Views'} value={viewsPercentage}/>
+                    <Bar profit={usersProfit} title={'Users'} value={usersPercentage}/>
+                    <Bar profit={subscriptionProfit} title={'Subscription'} value={subscriptionPercentage}/>
+            </Box>
                 </Box>
                 <Box boxSizing='border-box' py={'4'} p={['0','16']} >
                     <Heading textAlign={'center'} size={'md'} mb={'4'} children='Users'/>
-                    <DoughnutChart/>
-                </Box>
+
+              <DoughnutChart
+                users={[subscriptionCount, usersCount - subscriptionCount]}
+              />               
+               </Box>
 
             </Grid>
 
         </Box>
+      )}
     <Sidebar/>
+
     </Grid>
   )
 }
