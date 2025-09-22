@@ -84,7 +84,7 @@ export const getAllUsers = () => async (dispatch) => {
       withCredentials: true,
     });
 
-    dispatch({ type: "getAllUsersSuccess", payload: data.users });
+    dispatch({ type: "getAllUsersSuccess", payload: data.user });
   } catch (error) {
     dispatch({
       type: "getAllUsersFail",
@@ -97,7 +97,7 @@ export const updateUserRole = (id) => async (dispatch) => {
   try {
     dispatch({ type: "updateUserRoleRequest" });
 
-    const { data } = await axios.put(`${server}/admin/user/${id}`, {}, {
+    const { data } = await axios.put(`${server}/admin/users/${id}`, {}, {
       withCredentials: true,
     });
 
@@ -114,7 +114,7 @@ export const deleteUser = (id) => async (dispatch) => {
   try {
     dispatch({ type: "deleteUserRequest" });
 
-    const { data } = await axios.delete(`${server}/admin/user/${id}`, {
+    const { data } = await axios.delete(`${server}/admin/users/${id}`, {
       withCredentials: true,
     });
 
