@@ -233,7 +233,7 @@ const PaymentSuccess = () => {
             Go to Profile
           </Button>
         ) : (
-          <Button isLoading variant="ghost" disabled>
+          <Button isLoading={loading} variant="ghost" disabled>
             Redirecting to Profile...
           </Button>
         )}
