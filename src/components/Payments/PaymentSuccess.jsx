@@ -154,10 +154,14 @@ const PaymentSuccess = () => {
     (state) => state.subscription
   );
 
+  // Verify payment on page load
   useEffect(() => {
-    if (reference) dispatch(paymentVerification(reference));
+    if (reference) {
+      dispatch(paymentVerification(reference));
+    }
   }, [dispatch, reference]);
 
+  // Handle messages/errors from backend
   useEffect(() => {
     if (error) {
       toast.error(error);
@@ -170,83 +174,86 @@ const PaymentSuccess = () => {
     }
   }, [dispatch, error, message]);
 
+  // Auto-redirect after 3s
   useEffect(() => {
     if (message) {
-      const timer = setTimeout(() => navigate("/profile"), 3000);
+      const timer = setTimeout(() => {
+        navigate("/profile");
+      }, 3000);
       return () => clearTimeout(timer);
     }
   }, [message, navigate]);
 
+  // Button handler to go to profile immediately
   const handleGoToProfile = () => {
-    dispatch(loadUser()).then(() => navigate("/profile"));
+    dispatch(loadUser()).then(() => {
+      navigate("/profile");
+    });
   };
 
   return (
-    <Container maxW={["container.sm", "container.md"]} h="90vh" py={[8, 12]}>
+    <Container maxW="container.md" h="90vh" py={12}>
       <VStack
-        spacing={[6, 8]}
+        spacing={8}
         boxShadow="lg"
         borderRadius="xl"
         alignItems="center"
-        py={[6, 10]}
-        px={[4, 8]}
+        py={10}
+        px={8}
         bg="white"
       >
-        {/* Header */}
+        {/* Success Header */}
         <Box
           w="full"
-          py={[3, 4]}
-          px={[4, 6]}
+          py={4}
+          px={6}
           bg="yellow.400"
           borderTopRadius="xl"
           textAlign="center"
         >
-          <Heading fontSize={["lg", "2xl"]} color="black">
+          <Heading fontSize={["xl", "2xl"]} color="black">
             Payment Successful
           </Heading>
         </Box>
 
-        {/* Icon & Message */}
-        <VStack spacing={[3, 4]} textAlign="center" px={[2, 4]}>
-          <RiCheckboxCircleFill size={["3rem", "5rem"]} color="green" />
-          <Heading size={["sm", "md"]}>🎉 Congratulations!</Heading>
-          <Text fontSize={["sm", "md"]}>
+        {/* Icon and message */}
+        <VStack spacing={4} textAlign="center" px={4}>
+          <RiCheckboxCircleFill size="5rem" color="green" />
+          <Heading size="md">🎉 Congratulations!</Heading>
+          <Text fontSize="md">
             You are now a <b>Pro Member</b> and have access to all premium content.
           </Text>
 
           {reference && (
             <Box
-              mt={[2, 4]}
-              px={[2, 4]}
-              py={[1, 2]}
+              mt={4}
+              px={4}
+              py={2}
               border="1px dashed gray"
               borderRadius="md"
               bg="gray.50"
-              w="full"
-              textAlign="center"
             >
-              <Text fontSize={["xs", "sm"]} color="gray.700">
+              <Text fontSize="sm" color="gray.700">
                 Reference ID: {reference}
               </Text>
             </Box>
           )}
 
           {message && (
-            <Text fontSize={["xs", "sm"]} color="gray.500">
+            <Text fontSize="sm" color="gray.500">
               Redirecting to profile in 3 seconds...
             </Text>
           )}
         </VStack>
 
         {/* Footer Button */}
-        <Flex w="full" justify="center" mt={[4, 6]}>
+        <Flex w="full" justify="center">
           <Button
             onClick={handleGoToProfile}
             isLoading={loading}
             colorScheme="yellow"
-            size={["md", "lg"]}
+            size="lg"
             borderRadius="xl"
-            w={["full", "auto"]}
           >
             Go to Profile
           </Button>
