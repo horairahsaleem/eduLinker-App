@@ -160,10 +160,58 @@ export const profileReducer = createReducer(profileInitialState, (builder) => {
     });
 });
 
-// ====================== SUBSCRIPTION REDUCER ======================
+// // ====================== SUBSCRIPTION REDUCER ======================
+// const subscriptionInitialState = {
+//   loading: false,
+//   subscriptionId: null,
+//   message: null,
+//   error: null,
+// subscriptionStatus: null,   // ✅ add this
+
+// };
+
+// export const subscriptionReducer = createReducer(subscriptionInitialState, (builder) => {
+//   builder
+//     .addCase("buySubscriptionRequest", (state) => {
+//       state.loading = true;
+//     })
+//     .addCase("buySubscriptionSuccess", (state, action) => {
+//   state.loading = false;
+//   state.subscriptionId = action.payload.subscriptionId;  // ✅ payload updated
+//   state.subscriptionStatus = action.payload.subscriptionStatus; // ✅ mark active
+// })
+//     .addCase("buySubscriptionFail", (state, action) => {
+//       state.loading = false;
+//       state.error = action.payload;
+//     })
+//     .addCase("cancelSubscriptionRequest", (state) => {
+//       state.loading = true;
+//     })
+//    .addCase("cancelSubscriptionSuccess", (state, action) => {
+//   state.loading = false;
+//   state.subscriptionId = null;
+//   state.subscriptionStatus = null; // ✅ clear when cancelled
+//   state.message = action.payload;
+// })
+//     .addCase("cancelSubscriptionFail", (state, action) => {
+//       state.loading = false;
+//       state.error = action.payload;
+//     })
+//     .addCase("clearError", (state) => {
+//       state.error = null;
+//     })
+//     .addCase("clearMessage", (state) => {
+//       state.message = null;
+//     });
+// });
+
+
+// src/store/reducers/subscriptionReducer.js
+
 const subscriptionInitialState = {
   loading: false,
   subscriptionId: null,
+  subscriptionStatus: null, // ✅ active | null
   message: null,
   error: null,
 };
@@ -175,7 +223,8 @@ export const subscriptionReducer = createReducer(subscriptionInitialState, (buil
     })
     .addCase("buySubscriptionSuccess", (state, action) => {
       state.loading = false;
-      state.subscriptionId = action.payload;
+      state.subscriptionId = action.payload.subscriptionId;
+      state.subscriptionStatus = action.payload.subscriptionStatus; // ✅ e.g. "active"
     })
     .addCase("buySubscriptionFail", (state, action) => {
       state.loading = false;
@@ -186,6 +235,8 @@ export const subscriptionReducer = createReducer(subscriptionInitialState, (buil
     })
     .addCase("cancelSubscriptionSuccess", (state, action) => {
       state.loading = false;
+      state.subscriptionId = null;
+      state.subscriptionStatus = null; // ✅ reset on cancel
       state.message = action.payload;
     })
     .addCase("cancelSubscriptionFail", (state, action) => {
@@ -199,3 +250,4 @@ export const subscriptionReducer = createReducer(subscriptionInitialState, (buil
       state.message = null;
     });
 });
+

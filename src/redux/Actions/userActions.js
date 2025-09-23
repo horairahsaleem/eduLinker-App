@@ -82,7 +82,12 @@ export const logout = () => async (dispatch) => {
   }
 };
 
-// ====================== SUBSCRIPTION ACTIONS ======================
+
+
+
+
+
+// BUY SUBSCRIPTION (redirects to Stripe checkout)
 export const buySubscription = () => async (dispatch) => {
   try {
     dispatch({ type: "buySubscriptionRequest" });
@@ -91,7 +96,14 @@ export const buySubscription = () => async (dispatch) => {
       withCredentials: true,
     });
 
-    dispatch({ type: "buySubscriptionSuccess", payload: data.subscriptionId });
+    if (data?.checkoutUrl) {
+      window.location.href = data.checkoutUrl; // ✅ redirect to Stripe
+    } else {
+      dispatch({
+        type: "buySubscriptionFail",
+        payload: "Checkout URL not returned from server",
+      });
+    }
   } catch (error) {
     dispatch({
       type: "buySubscriptionFail",
@@ -100,6 +112,33 @@ export const buySubscription = () => async (dispatch) => {
   }
 };
 
+// VERIFY PAYMENT (runs on PaymentSuccess page)
+export const paymentVerification = (session_id) => async (dispatch) => {
+  try {
+    dispatch({ type: "buySubscriptionRequest" });
+
+    const { data } = await axios.post(
+      `${server}/paymentverification`,
+      { session_id },
+      { withCredentials: true }
+    );
+
+    dispatch({
+      type: "buySubscriptionSuccess",
+      payload: {
+        subscriptionId: data.subscriptionId,
+        subscriptionStatus: data.subscriptionStatus, // ✅ active
+      },
+    });
+  } catch (error) {
+    dispatch({
+      type: "buySubscriptionFail",
+      payload: error.response?.data?.message || error.message,
+    });
+  }
+};
+
+// CANCEL SUBSCRIPTION
 export const cancelSubscription = () => async (dispatch) => {
   try {
     dispatch({ type: "cancelSubscriptionRequest" });
@@ -116,3 +155,38 @@ export const cancelSubscription = () => async (dispatch) => {
     });
   }
 };
+
+// // ====================== SUBSCRIPTION ACTIONS ======================
+// export const buySubscription = () => async (dispatch) => {
+//   try {
+//     dispatch({ type: "buySubscriptionRequest" });
+
+//     const { data } = await axios.get(`${server}/subscribe`, {
+//       withCredentials: true,
+//     });
+
+//     dispatch({ type: "buySubscriptionSuccess", payload: data.subscriptionId });
+//   } catch (error) {
+//     dispatch({
+//       type: "buySubscriptionFail",
+//       payload: error.response?.data?.message || error.message,
+//     });
+//   }
+// };
+
+// export const cancelSubscription = () => async (dispatch) => {
+//   try {
+//     dispatch({ type: "cancelSubscriptionRequest" });
+
+//     const { data } = await axios.delete(`${server}/subscribe/cancel`, {
+//       withCredentials: true,
+//     });
+
+//     dispatch({ type: "cancelSubscriptionSuccess", payload: data.message });
+//   } catch (error) {
+//     dispatch({
+//       type: "cancelSubscriptionFail",
+//       payload: error.response?.data?.message || error.message,
+//     });
+//   }
+// };
