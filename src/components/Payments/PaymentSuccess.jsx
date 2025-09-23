@@ -129,7 +129,6 @@
 // export default PaymentSuccess;
 
 
-
 import React, { useEffect } from "react";
 import {
   Box,
@@ -147,7 +146,7 @@ import { paymentVerification, loadUser } from "../../redux/Actions/userActions.j
 
 const PaymentSuccess = () => {
   const [searchParams] = useSearchParams();
-  const reference = searchParams.get("session_id"); // ✅ Stripe session_id
+  const reference = searchParams.get("session_id"); 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -155,14 +154,12 @@ const PaymentSuccess = () => {
     (state) => state.subscription
   );
 
-  // 🔹 Verify payment when we land on this page
   useEffect(() => {
     if (reference) {
       dispatch(paymentVerification(reference));
     }
   }, [dispatch, reference]);
 
-  // 🔹 Handle backend response
   useEffect(() => {
     if (error) {
       toast.error(error);
@@ -171,11 +168,10 @@ const PaymentSuccess = () => {
     if (message) {
       toast.success(message);
       dispatch({ type: "clearMessage" });
-      dispatch(loadUser()); // refresh user so subscription status updates
+      dispatch(loadUser()); 
     }
   }, [dispatch, error, message]);
 
-  // 🔹 Auto-redirect to profile after success
   useEffect(() => {
     if (message) {
       const timer = setTimeout(() => {
@@ -185,7 +181,6 @@ const PaymentSuccess = () => {
     }
   }, [message, navigate]);
 
-  // 🔹 Manual "Go to Profile" button handler
   const handleGoToProfile = () => {
     dispatch(loadUser()).then(() => {
       navigate("/profile");
@@ -234,14 +229,29 @@ const PaymentSuccess = () => {
             <RiCheckboxCircleFill />
           </Heading>
 
+          {reference && (
+            <Box
+              px={4}
+              py={2}
+              bg="gray.100"
+              borderRadius="md"
+              border="1px dashed"
+              borderColor="gray.300"
+            >
+              <Text fontSize="sm" color="gray.700">
+                Reference ID: {reference}
+              </Text>
+            </Box>
+          )}
+
           {message && (
             <Text fontSize="sm" color="gray.600">
-              Redirecting to your profile in 3 seconds...
+              Redirecting to profile in 3 seconds...
             </Text>
           )}
         </VStack>
 
-        {/* Button */}
+        {/* Go to Profile Button */}
         <Button
           onClick={handleGoToProfile}
           isLoading={loading}
@@ -251,13 +261,6 @@ const PaymentSuccess = () => {
         >
           Go to Profile Now
         </Button>
-
-        {/* Debug Reference */}
-        {reference && (
-          <Text fontSize="xs" color="gray.500">
-            Reference ID: {reference}
-          </Text>
-        )}
       </VStack>
     </Container>
   );

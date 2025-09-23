@@ -181,7 +181,7 @@ const Subscribe = () => {
         {/* Header */}
         <Box bg="yellow.400" py={4} px={6} w="full">
           <Text fontWeight="bold" color="black" fontSize="lg">
-            Pro Pack – Rs 500/year
+            Pro Pack – $ 100/year
           </Text>
         </Box>
 
