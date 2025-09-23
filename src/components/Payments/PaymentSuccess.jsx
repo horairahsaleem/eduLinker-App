@@ -137,10 +137,9 @@ const PaymentSuccess = () => {
       toast.success(message);
       dispatch({ type: "clearMessage" });
 
-      // reload user, then navigate to profile
-      dispatch(loadUser()).then(() => {
-        navigate("/profile");
-      });
+      // reload user and immediately redirect
+      dispatch(loadUser());
+      navigate("/profile");
     }
   }, [dispatch, error, message, navigate]);
 
@@ -177,7 +176,7 @@ const PaymentSuccess = () => {
           </VStack>
         </Box>
 
-        {/* Instead of Link, show disabled button until redirect */}
+        {/* Static message while redirecting */}
         <Button isLoading={loading} variant={"ghost"} disabled>
           Redirecting to Profile...
         </Button>
