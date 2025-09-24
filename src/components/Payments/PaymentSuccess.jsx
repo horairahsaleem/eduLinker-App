@@ -128,6 +128,149 @@
 
 // export default PaymentSuccess;
 
+
+// ***********.
+
+// import React, { useEffect } from "react";
+// import {
+//   Box,
+//   Button,
+//   Container,
+//   Heading,
+//   Text,
+//   VStack,
+//   Flex,
+// } from "@chakra-ui/react";
+// import { RiCheckboxCircleFill } from "react-icons/ri";
+// import { useSearchParams, useNavigate } from "react-router-dom";
+// import { useDispatch, useSelector } from "react-redux";
+// import toast from "react-hot-toast";
+// import { paymentVerification, loadUser } from "../../redux/Actions/userActions.js";
+
+// const PaymentSuccess = () => {
+//   const [searchParams] = useSearchParams();
+//   const reference = searchParams.get("session_id");
+//   const dispatch = useDispatch();
+//   const navigate = useNavigate();
+
+//   const { loading, message, error } = useSelector(
+//     (state) => state.subscription
+//   );
+
+//   // Verify payment on page load
+//   useEffect(() => {
+//     if (reference) {
+//       dispatch(paymentVerification(reference));
+//     }
+//   }, [dispatch, reference]);
+
+//   // Handle messages/errors from backend
+//   useEffect(() => {
+//     if (error) {
+//       toast.error(error);
+//       dispatch({ type: "clearError" });
+//     }
+//     if (message) {
+//       toast.success(message);
+//       dispatch({ type: "clearMessage" });
+//       dispatch(loadUser());
+//     }
+//   }, [dispatch, error, message]);
+
+//   // Auto-redirect after 3s
+//   useEffect(() => {
+//     if (message) {
+//       const timer = setTimeout(() => {
+//         navigate("/profile");
+//       }, 3000);
+//       return () => clearTimeout(timer);
+//     }
+//   }, [message, navigate]);
+
+//   // Button handler to go to profile immediately
+//   const handleGoToProfile = () => {
+//     dispatch(loadUser()).then(() => {
+//       navigate("/profile");
+//     });
+//   };
+
+//   return (
+//     <Container maxW="container.md" h="90vh" py={12}>
+//       <VStack
+//         spacing={8}
+//         boxShadow="lg"
+//         borderRadius="xl"
+//         alignItems="center"
+//         py={10}
+//         px={8}
+//         bg="white"
+//       >
+//         {/* Success Header */}
+//         <Box
+//           w="full"
+//           py={4}
+//           px={6}
+//           bg="yellow.400"
+//           borderTopRadius="xl"
+//           textAlign="center"
+//         >
+//           <Heading fontSize={["xl", "2xl"]} color="black">
+//             Payment Successful
+//           </Heading>
+//         </Box>
+
+//         {/* Icon and message */}
+//         <VStack spacing={4} textAlign="center" px={4}>
+//           <RiCheckboxCircleFill size="5rem" color="green" />
+//           <Heading size="md">🎉 Congratulations!</Heading>
+//           <Text fontSize="md">
+//             You are now a <b>Pro Member</b> and have access to all premium content.
+//           </Text>
+
+//           {reference && (
+//             <Box
+//               mt={4}
+//               px={4}
+//               py={2}
+//               border="1px dashed gray"
+//               borderRadius="md"
+//               bg="gray.50"
+//             >
+//               <Text fontSize="sm" color="gray.700">
+//                 Reference ID: {reference}
+//               </Text>
+//             </Box>
+//           )}
+
+//           {message && (
+//             <Text fontSize="sm" color="gray.500">
+//               Redirecting to profile in 3 seconds...
+//             </Text>
+//           )}
+//         </VStack>
+
+//         {/* Footer Button */}
+//         <Flex w="full" justify="center">
+//           <Button
+//             onClick={handleGoToProfile}
+//             isLoading={loading}
+//             colorScheme="yellow"
+//             size="lg"
+//             borderRadius="xl"
+//           >
+//             Go to Profile
+//           </Button>
+//         </Flex>
+//       </VStack>
+//     </Container>
+//   );
+// };
+
+// export default PaymentSuccess;
+
+
+
+
 import React, { useEffect } from "react";
 import {
   Box,
@@ -154,14 +297,12 @@ const PaymentSuccess = () => {
     (state) => state.subscription
   );
 
-  // Verify payment on page load
   useEffect(() => {
     if (reference) {
       dispatch(paymentVerification(reference));
     }
   }, [dispatch, reference]);
 
-  // Handle messages/errors from backend
   useEffect(() => {
     if (error) {
       toast.error(error);
@@ -174,7 +315,6 @@ const PaymentSuccess = () => {
     }
   }, [dispatch, error, message]);
 
-  // Auto-redirect after 3s
   useEffect(() => {
     if (message) {
       const timer = setTimeout(() => {
@@ -184,7 +324,6 @@ const PaymentSuccess = () => {
     }
   }, [message, navigate]);
 
-  // Button handler to go to profile immediately
   const handleGoToProfile = () => {
     dispatch(loadUser()).then(() => {
       navigate("/profile");
@@ -192,55 +331,62 @@ const PaymentSuccess = () => {
   };
 
   return (
-    <Container maxW="container.md" h="90vh" py={12}>
+    <Container 
+      maxW={{ base: "100%", md: "container.md" }} 
+      h="100vh" 
+      py={{ base: 6, md: 12 }} 
+      px={{ base: 4, md: 0 }}
+    >
       <VStack
-        spacing={8}
+        spacing={{ base: 6, md: 8 }}
         boxShadow="lg"
         borderRadius="xl"
         alignItems="center"
-        py={10}
-        px={8}
+        py={{ base: 8, md: 10 }}
+        px={{ base: 4, md: 8 }}
         bg="white"
+        w="full"
       >
         {/* Success Header */}
         <Box
           w="full"
-          py={4}
-          px={6}
+          py={{ base: 3, md: 4 }}
+          px={{ base: 4, md: 6 }}
           bg="yellow.400"
           borderTopRadius="xl"
           textAlign="center"
         >
-          <Heading fontSize={["xl", "2xl"]} color="black">
+          <Heading fontSize={{ base: "lg", md: "2xl" }} color="black">
             Payment Successful
           </Heading>
         </Box>
 
         {/* Icon and message */}
-        <VStack spacing={4} textAlign="center" px={4}>
-          <RiCheckboxCircleFill size="5rem" color="green" />
-          <Heading size="md">🎉 Congratulations!</Heading>
-          <Text fontSize="md">
+        <VStack spacing={4} textAlign="center" px={{ base: 2, md: 4 }}>
+          <RiCheckboxCircleFill size="4rem" color="green" />
+          <Heading size={{ base: "sm", md: "md" }}>🎉 Congratulations!</Heading>
+          <Text fontSize={{ base: "sm", md: "md" }}>
             You are now a <b>Pro Member</b> and have access to all premium content.
           </Text>
 
           {reference && (
             <Box
               mt={4}
-              px={4}
+              px={{ base: 3, md: 4 }}
               py={2}
               border="1px dashed gray"
               borderRadius="md"
               bg="gray.50"
+              w="full"
             >
-              <Text fontSize="sm" color="gray.700">
+              <Text fontSize={{ base: "xs", md: "sm" }} color="gray.700">
                 Reference ID: {reference}
               </Text>
             </Box>
           )}
 
           {message && (
-            <Text fontSize="sm" color="gray.500">
+            <Text fontSize={{ base: "xs", md: "sm" }} color="gray.500">
               Redirecting to profile in 3 seconds...
             </Text>
           )}
@@ -252,8 +398,9 @@ const PaymentSuccess = () => {
             onClick={handleGoToProfile}
             isLoading={loading}
             colorScheme="yellow"
-            size="lg"
+            size={{ base: "md", md: "lg" }}
             borderRadius="xl"
+            w={{ base: "full", md: "auto" }}
           >
             Go to Profile
           </Button>
@@ -264,3 +411,4 @@ const PaymentSuccess = () => {
 };
 
 export default PaymentSuccess;
+
