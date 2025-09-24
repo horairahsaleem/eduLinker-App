@@ -268,8 +268,6 @@
 
 // export default PaymentSuccess;
 
-
-
 import React, { useEffect } from "react";
 import {
   Box,
@@ -366,25 +364,33 @@ const PaymentSuccess = () => {
         </Box>
 
         {/* Icon + Text */}
-        <VStack spacing={4}>
+        <VStack spacing={4} w="full" px={{ base: 2, md: 0 }}>
           <RiCheckboxCircleFill size="4rem" color="green" />
           <Heading size={{ base: "sm", md: "md" }}>🎉 Congratulations!</Heading>
-          <Text fontSize={{ base: "sm", md: "md" }}>
+          <Text fontSize={{ base: "sm", md: "md" }} textAlign="center" px={2}>
             You are now a <b>Pro Member</b> and have access to all premium content.
           </Text>
 
-          {/* Reference ID Box */}
+          {/* Reference ID Box - FIXED */}
           {reference && (
             <Box
               mt={2}
               px={{ base: 3, md: 4 }}
               py={2}
-              border="1px dashed gray"
+              border="1px dashed"
+              borderColor="gray.300"
               borderRadius="md"
               bg="gray.50"
               w="full"
+              maxW="100%"
+              overflow="hidden"
             >
-              <Text fontSize={{ base: "xs", md: "sm" }} color="gray.700">
+              <Text 
+                fontSize={{ base: "xs", md: "sm" }} 
+                color="gray.700"
+                wordBreak="break-all"
+                textAlign="center"
+              >
                 Reference ID: {reference}
               </Text>
             </Box>
@@ -399,7 +405,7 @@ const PaymentSuccess = () => {
         </VStack>
 
         {/* Footer Button */}
-        <Flex w="full" justify="center">
+        <Flex w="full" justify="center" px={{ base: 2, md: 0 }}>
           <Button
             onClick={handleGoToProfile}
             isLoading={loading}
@@ -407,6 +413,7 @@ const PaymentSuccess = () => {
             size={{ base: "md", md: "lg" }}
             borderRadius="xl"
             w={{ base: "full", md: "auto" }}
+            minW={{ base: "auto", md: "200px" }}
           >
             Go to Profile
           </Button>
