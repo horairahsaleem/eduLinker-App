@@ -270,7 +270,6 @@
 
 
 
-
 import React, { useEffect } from "react";
 import {
   Box,
@@ -280,6 +279,7 @@ import {
   Text,
   VStack,
   Flex,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import { RiCheckboxCircleFill } from "react-icons/ri";
 import { useSearchParams, useNavigate } from "react-router-dom";
@@ -330,28 +330,32 @@ const PaymentSuccess = () => {
     });
   };
 
+  const cardBg = useColorModeValue("white", "gray.800");
+
   return (
-    <Container 
-      maxW={{ base: "100%", md: "container.md" }} 
-      h="100vh" 
-      py={{ base: 6, md: 12 }} 
+    <Container
+      maxW={{ base: "100%", md: "container.md" }}
+      h="100vh"
+      py={{ base: 8, md: 12 }}
       px={{ base: 4, md: 0 }}
     >
       <VStack
-        spacing={{ base: 6, md: 8 }}
+        spacing={6}
         boxShadow="lg"
         borderRadius="xl"
         alignItems="center"
-        py={{ base: 8, md: 10 }}
+        py={{ base: 6, md: 10 }}
         px={{ base: 4, md: 8 }}
-        bg="white"
-        w="full"
+        bg={cardBg}
+        maxW="md"
+        mx="auto"
+        textAlign="center"
       >
-        {/* Success Header */}
+        {/* Header */}
         <Box
           w="full"
           py={{ base: 3, md: 4 }}
-          px={{ base: 4, md: 6 }}
+          px={{ base: 2, md: 6 }}
           bg="yellow.400"
           borderTopRadius="xl"
           textAlign="center"
@@ -361,17 +365,18 @@ const PaymentSuccess = () => {
           </Heading>
         </Box>
 
-        {/* Icon and message */}
-        <VStack spacing={4} textAlign="center" px={{ base: 2, md: 4 }}>
+        {/* Icon + Text */}
+        <VStack spacing={4}>
           <RiCheckboxCircleFill size="4rem" color="green" />
           <Heading size={{ base: "sm", md: "md" }}>🎉 Congratulations!</Heading>
           <Text fontSize={{ base: "sm", md: "md" }}>
             You are now a <b>Pro Member</b> and have access to all premium content.
           </Text>
 
+          {/* Reference ID Box */}
           {reference && (
             <Box
-              mt={4}
+              mt={2}
               px={{ base: 3, md: 4 }}
               py={2}
               border="1px dashed gray"
@@ -385,6 +390,7 @@ const PaymentSuccess = () => {
             </Box>
           )}
 
+          {/* Redirect Notice */}
           {message && (
             <Text fontSize={{ base: "xs", md: "sm" }} color="gray.500">
               Redirecting to profile in 3 seconds...
@@ -411,4 +417,3 @@ const PaymentSuccess = () => {
 };
 
 export default PaymentSuccess;
-
